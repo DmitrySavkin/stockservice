@@ -1,27 +1,19 @@
-version: '3.7'
+version: '3'
 services:
-  mongodb_container:
-    image: mongo:latest
+  teste-postgres-compose:
+    image: postgres:10
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+      POSTGRES_PASSWORD: "Post"
     ports:
-      - 27017:27017
+      - "15432:5432"
+    volumes:
+      - /var/lib/postgresql/data
 
-  mongodb-express:
-    image: mongo-express
-    container_name: mongo-express
-    restart: always
-    ports:
-      - 8089:8081
-    environment:
-      - ME_CONFIG_MONGODB_ADMINUSERNAME=rootuser
-      - ME_CONFIG_MONGODB_ADMINPASSWORD=rootpass
-      - ME_CONFIG_MONGODB_SERVER=mongodb
+    networks:
+      - postgres-compose-network
 
-volumes:
-  data: {}
-
+  javerservice:
+    image: openjdk:11
 networks:
-  default:
-    name: mongodb_network
+  postgres-compose-network:
+    driver: bridge

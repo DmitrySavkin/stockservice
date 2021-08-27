@@ -4,12 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Transactional;
 import ru.savkin.model.stocks.Stock;
 import ru.savkin.repository.fakes.StockRepository;
 import ru.savkin.stockoperator.StockLoader;
 import ru.savkin.stockoperator.StockOperator;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class StockServiceImpl implements StockService {
@@ -27,18 +29,34 @@ public class StockServiceImpl implements StockService {
     private StockOperator stockOperator;
 
 
+    @Autowired
+    private StockRepository repository;
+
     @Override
+    @Transactional
     public void process() {
-
-        // for(;;) {
-
         List<Stock> stock = stockLoader.getStocksFromUrl(url);
         stockOperator.findActualHighStock(stock, 5);
         try {
             Thread.sleep(5000);
+            System.out.println("Stock  " + stock.size());
+            saveStocks(stock.stream().limit(5).collect(Collectors.toList()));
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        //  }
+    }
+
+    private void saveStocks(List<Stock> stocks) {
+        for (Stock stock : stocks) {
+            if (repository.existsById(stock.getSymbol())) {
+                Stock stockFromDB = repository.getById(stock.getSymbol());
+                if (stockFromDB.getPrice().compareTo(stock.getPrice()) != 0) {
+                    repository.save(stock);
+                }
+            } else {
+                repository.save(stock);
+            }
+        }
     }
 }

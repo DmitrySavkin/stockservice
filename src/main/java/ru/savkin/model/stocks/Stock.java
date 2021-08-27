@@ -6,7 +6,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.id.IdentityGenerator;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -14,6 +19,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 //@JsonIgnoreProperties(ignoreUnknown=true)
 public class Stock implements Serializable {
 
@@ -36,6 +42,9 @@ public class Stock implements Serializable {
      */
 
 
+   // @GeneratedValue(strategy = GenerationType.IDENTITY)
+   // private int id;
+    @Id
     private String symbol;
 
     private String exchange;

@@ -32,7 +32,7 @@ public class StockOperator {
         if (Objects.isNull(stocksList)) {
             //TODO Loggg
         } else {
-            List<Callable<Object>> calls = stocksList.stream().map(stock ->
+            List<Callable<Object>> calls = stocksList.stream().limit(20).map(stock ->
                     Executors.callable(new StockParser(stock))).collect(Collectors.toList());
             ExecutorService executorService = Executors.newFixedThreadPool(64);
             try {
