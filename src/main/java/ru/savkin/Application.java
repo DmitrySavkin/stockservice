@@ -19,12 +19,12 @@ import ru.savkin.services.StockService;
 public class Application implements ApplicationRunner, CommandLineRunner {
 
 
+    //@Autowired
+    //private StockService stockService;
+
+
     @Autowired
-    private StockService stockService;
-
-
- //   @Autowired
-   // private TestRepository repository;
+    private TestRepository repository;
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -33,12 +33,12 @@ public class Application implements ApplicationRunner, CommandLineRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        stockService.process();
+        //stockService.process();
     }
 
     @Override
     public void run(String... args) throws Exception {
-     // repository.save(new TestDocPerson("A", "B"));
+        repository.save(new TestDocPerson("A", "B"));
         System.out.println("Hello from Command runer");
     }
 

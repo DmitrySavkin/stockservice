@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
 import ru.savkin.model.stocks.Stock;
-import ru.savkin.repository.fakes.StockRepository;
 import ru.savkin.stockoperator.StockLoader;
 import ru.savkin.stockoperator.StockOperator;
 
@@ -17,8 +16,8 @@ import java.util.stream.Collectors;
 public class StockServiceImpl implements StockService {
 
 
-    private StockRepository stockRepository;
-
+//    private StockRepository stockRepository;
+//
     @Value("${ref-data-url}")
     private String url;
 
@@ -29,8 +28,8 @@ public class StockServiceImpl implements StockService {
     private StockOperator stockOperator;
 
 
-    @Autowired
-    private StockRepository repository;
+//    @Autowired
+//    private StockRepository repository;
 
     @Override
     @Transactional
@@ -49,14 +48,14 @@ public class StockServiceImpl implements StockService {
 
     private void saveStocks(List<Stock> stocks) {
         for (Stock stock : stocks) {
-            if (repository.existsById(stock.getSymbol())) {
-                Stock stockFromDB = repository.getById(stock.getSymbol());
-                if (stockFromDB.getPrice().compareTo(stock.getPrice()) != 0) {
-                    repository.save(stock);
-                }
-            } else {
-                repository.save(stock);
-            }
+//            if (repository.existsById(stock.getSymbol())) {
+//                Stock stockFromDB = repository.getById(stock.getSymbol());
+//                if (stockFromDB.getPrice().compareTo(stock.getPrice()) != 0) {
+//                    repository.save(stock);
+//                }
+//            } else {
+//                repository.save(stock);
+//            }
         }
     }
 }
