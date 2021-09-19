@@ -151,6 +151,13 @@
                     <target>11</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>ru.savkin.Application</mainClass>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
