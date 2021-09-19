@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
 import ru.savkin.model.stocks.Stock;
+import ru.savkin.repository.StockRepositories;
 import ru.savkin.stockoperator.StockLoader;
 import ru.savkin.stockoperator.StockOperator;
 
@@ -28,8 +29,8 @@ public class StockServiceImpl implements StockService {
     private StockOperator stockOperator;
 
 
-//    @Autowired
-//    private StockRepository repository;
+    @Autowired
+    private StockRepositories repository;
 
     @Override
     @Transactional

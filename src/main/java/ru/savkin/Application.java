@@ -8,7 +8,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.context.annotation.PropertySource;
-import ru.savkin.model.stocks.TestDocPerson;
 import ru.savkin.services.StockService;
 
 @PropertySource(name = "myProperties", value = "values.properties")
@@ -19,12 +18,9 @@ import ru.savkin.services.StockService;
 public class Application implements ApplicationRunner, CommandLineRunner {
 
 
-    //@Autowired
-    //private StockService stockService;
-
-
     @Autowired
-    private TestRepository repository;
+    private StockService stockService;
+
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -33,12 +29,11 @@ public class Application implements ApplicationRunner, CommandLineRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        //stockService.process();
+        stockService.process();
     }
 
     @Override
     public void run(String... args) throws Exception {
-        repository.save(new TestDocPerson("A", "B"));
         System.out.println("Hello from Command runer");
     }
 
