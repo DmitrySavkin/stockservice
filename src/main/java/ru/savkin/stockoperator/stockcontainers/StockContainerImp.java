@@ -1,5 +1,6 @@
 package ru.savkin.stockoperator.stockcontainers;
 
+import org.apache.commons.lang3.tuple.Pair;
 import ru.savkin.model.stocks.Stock;
 
 import java.math.BigDecimal;
@@ -9,8 +10,8 @@ import java.util.stream.Collectors;
 
 public class StockContainerImp extends StockContainer {
 
-    volatile Map.Entry<BigDecimal, Stock> minPair;
-    volatile Map.Entry<BigDecimal, Stock> maxPair;
+    volatile Pair<BigDecimal, Stock> minPair;
+    volatile Pair<BigDecimal, Stock> maxPair;
     volatile TreeMap<BigDecimal, Stock> deque = new TreeMap();
     int limit;
 
@@ -37,15 +38,15 @@ public class StockContainerImp extends StockContainer {
 
     public void addStock(Stock stock) {
         if (minPair == null) {
-            minPair = maxPair = Map.entry(stock.getPrice(), stock);
+            minPair = maxPair = Pair.of(stock.getPrice(), stock);
             deque.put(stock.getPrice(), stock);
         } else {
             if (deque.size() < limit) {
                 if (maxPair.getKey().compareTo(stock.getPrice()) < 0) {
-                    maxPair = Map.entry(stock.getPrice(), stock);
+                    maxPair = Pair.of(stock.getPrice(), stock);
                 }
                 if (minPair.getKey().compareTo(stock.getPrice()) > 0) {
-                    minPair = Map.entry(stock.getPrice(), stock);
+                    minPair = Pair.of(stock.getPrice(), stock);
                 }
                 deque.put(stock.getPrice(), stock);
 
@@ -57,18 +58,20 @@ public class StockContainerImp extends StockContainer {
 
     //TODO REfactor
     protected void updateMinPair(Stock stock) {
-        minPair = Map.entry(stock.getPrice(), stock);
-        Map.Entry<BigDecimal, Stock> tmp = maxPair;
-        maxPair = deque.higherEntry(tmp.getKey());
+        minPair = Pair.of(stock.getPrice(), stock);
+        Pair<BigDecimal, Stock> tmp = maxPair;
+        Map.Entry<BigDecimal, Stock> tmp3 = deque.higherEntry(tmp.getKey());
+        maxPair = Pair.of(tmp3.getKey(), tmp3.getValue());
         deque.remove(tmp.getKey());
     }
 
 
     protected void addOrderedStock(Stock stock) {
         if (maxPair.getKey().compareTo(stock.getPrice()) < 0) {
-            maxPair = Map.entry(stock.getPrice(), stock);
+            maxPair = Pair.of(stock.getPrice(), stock);
             Map.Entry<BigDecimal, Stock> tmp = minPair;
-            minPair = deque.higherEntry(tmp.getKey());
+            Map.Entry<BigDecimal, Stock> tmp3 = deque.higherEntry(tmp.getKey());
+            minPair = Pair.of(tmp3.getKey(), tmp3.getValue());
             deque.remove(tmp.getKey());
         }
         if (minPair.getKey().compareTo(stock.getPrice()) < 0
@@ -77,7 +80,8 @@ public class StockContainerImp extends StockContainer {
             Map.Entry<BigDecimal, Stock> tmp = minPair;
             deque.remove(tmp.getKey());
             deque.put(stock.getPrice(), stock);
-            minPair = deque.firstEntry();
+            Map.Entry<BigDecimal, Stock> tmp3  = deque.firstEntry();
+            minPair = Pair.of(tmp3.getKey(), tmp3.getValue());
         }
     }
 

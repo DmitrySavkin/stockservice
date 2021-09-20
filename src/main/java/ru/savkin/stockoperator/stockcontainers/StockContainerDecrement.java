@@ -1,5 +1,6 @@
 package ru.savkin.stockoperator.stockcontainers;
 
+import org.apache.commons.lang3.tuple.Pair;
 import ru.savkin.model.stocks.Stock;
 
 import java.math.BigDecimal;
@@ -24,7 +25,8 @@ public class StockContainerDecrement extends StockContainerImp {
             Map.Entry<BigDecimal, Stock> tmp = maxPair;
             deque.remove(tmp.getKey());
             deque.put(stock.getPrice(), stock);
-            maxPair = deque.lastEntry();
+            Map.Entry<BigDecimal, Stock> tmp3 = deque.lastEntry();
+            maxPair = Pair.of(tmp3.getKey(), tmp3.getValue());
         }
     }
 }
