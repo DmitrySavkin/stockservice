@@ -6,6 +6,7 @@ import ru.savkin.model.stocks.Stock;
 import java.math.BigDecimal;
 import java.util.Map;
 
+@Deprecated
 public class StockContainerDecrement extends StockContainerImp {
 
     public StockContainerDecrement(int limit) {
