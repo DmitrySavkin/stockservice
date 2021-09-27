@@ -1,1 +1,1 @@
-web: java -Dspring.profiles.active=default -Dserver.port=$PORT -jar target/*.jar
+worker: sh target/bin/worker

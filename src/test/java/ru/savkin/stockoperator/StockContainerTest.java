@@ -39,26 +39,26 @@ public class StockContainerTest {
     }
 
 //    @Ignore
-//    @Test
-//    public void testStockContainerImpDescrement() {
-//        StockContainer stockContainer = StockContainerFabric.getContainer(4, StockContainerType.DESC);
-//
-//        List<Stock> stockList = new ArrayList<>();
-//        stockList.add(new Stock("A", new BigDecimal(3.4)));
-//        stockList.add(new Stock("B", new BigDecimal(222.4)));
-//        stockList.add(new Stock("C", new BigDecimal(1329.4)));
-//        stockList.add(new Stock("D", new BigDecimal(13.4)));
-//        stockList.add(new Stock("E", new BigDecimal(13.8)));
-//        stockList.add(new Stock("K", new BigDecimal(17.4)));
-//        stockList.add(new Stock("Z", new BigDecimal(0.4)));
-//        for (Stock stock: stockList) {
-//            stockContainer.addStock(stock);
-//        }
-//        List<Stock> result = stockContainer.getStocks();
-//        Stock maxStock = stockContainer.getMaxStock();
-//        Stock minStock = stockContainer.getMinStock();
-//        assertEquals(new BigDecimal(13.8), maxStock.getPrice());
-//        assertEquals(new BigDecimal(0.4), minStock.getPrice());
-//        assertEquals(4, result.size());
-//    }
+////    @Test
+////    public void testStockContainerImpDescrement() {
+////        StockContainer stockContainer = StockContainerFabric.getContainer(4, StockContainerType.DESC);
+////
+////        List<Stock> stockList = new ArrayList<>();
+////        stockList.add(new Stock("A", new BigDecimal(3.4)));
+////        stockList.add(new Stock("B", new BigDecimal(222.4)));
+////        stockList.add(new Stock("C", new BigDecimal(1329.4)));
+////        stockList.add(new Stock("D", new BigDecimal(13.4)));
+////        stockList.add(new Stock("E", new BigDecimal(13.8)));
+////        stockList.add(new Stock("K", new BigDecimal(17.4)));
+////        stockList.add(new Stock("Z", new BigDecimal(0.4)));
+////        for (Stock stock: stockList) {
+////            stockContainer.addStock(stock);
+////        }
+////        List<Stock> result = stockContainer.getStocks();
+////        Stock maxStock = stockContainer.getMaxStock();
+////        Stock minStock = stockContainer.getMinStock();
+////        assertEquals(new BigDecimal(13.8), maxStock.getPrice());
+////        assertEquals(new BigDecimal(0.4), minStock.getPrice());
+////        assertEquals(4, result.size());
+////    }
 }
