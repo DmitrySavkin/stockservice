@@ -36,16 +36,19 @@ public class StockServiceImpl implements StockService {
     @Override
     @Transactional
     public void process() {
-        List<Stock> stock = stockLoader.getStocksFromUrl(url);
-        stockOperator.findActualHighStock(stock, 5);
-        try {
-            Thread.sleep(5000);
-            System.out.println("Stock  " + stock.size());
-            saveStocks(stock.stream().limit(5).collect(Collectors.toList()));
 
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+       while (true) {
+           List<Stock> stock = stockLoader.getStocksFromUrl(url);
+           stockOperator.findActualHighStock(stock, 5);
+           try {
+               Thread.sleep(5000);
+               System.out.println("Stock  " + stock.size());
+               saveStocks(stock.stream().limit(5).collect(Collectors.toList()));
+
+           } catch (InterruptedException e) {
+               e.printStackTrace();
+           }
+       }
     }
 
     private void saveStocks(List<Stock> stocks) {
