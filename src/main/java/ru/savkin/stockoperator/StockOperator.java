@@ -3,7 +3,7 @@ package ru.savkin.stockoperator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import ru.savkin.model.stocks.Stock;
+import ru.savkin.model.StockEntity;
 import ru.savkin.stockoperator.stockcontainers.StockContainer;
 import ru.savkin.stockoperator.stockcontainers.StockContainerFabric;
 
@@ -17,15 +17,15 @@ import java.util.stream.Collectors;
 public class StockOperator {
 
 
-    @Value("${latest-price-url}")
+    @Value("${ieaxapi.latest-price-url}")
     private String latestPriceUrl;
 
-    @Value("${token}")
+    @Value("${ieaxapi.token}")
     private String token;
 
     private StockContainer stockContainer;
 
-    public void findActualHighStock(List<Stock> stocksList, int limit) {
+    public void findActualHighStock(List<StockEntity> stocksList, int limit) {
 
         stockContainer = StockContainerFabric.getContainer(limit);
 
@@ -49,22 +49,22 @@ public class StockOperator {
 
     private class StockParser implements Runnable {
 
-        private Stock stock;
+        private StockEntity stockEntity;
 
 
-        public StockParser(Stock stock) {
-            this.stock = stock;
+        public StockParser(StockEntity stockEntity) {
+            this.stockEntity = stockEntity;
 
         }
 
         @Override
         public void run() {
 
-            String requestUrl = String.format(latestPriceUrl + token, stock.getSymbol());
+            String requestUrl = String.format(latestPriceUrl + token, stockEntity.getSymbol());
             RestTemplate restTemplate = new RestTemplate();
             BigDecimal price = restTemplate.getForObject(requestUrl, BigDecimal.class);
-            stock.setPrice(price);
-            stockContainer.addStock(stock);
+            stockEntity.setPrice(price);
+            stockContainer.addStock(stockEntity);
         }
 
     }

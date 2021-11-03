@@ -1,71 +1,63 @@
 package ru.savkin.services;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
-import ru.savkin.model.stocks.Stock;
+import ru.savkin.dto.StockDto;
+import ru.savkin.model.StockEntity;
 import ru.savkin.repository.StockRepositories;
 import ru.savkin.stockoperator.StockLoader;
 import ru.savkin.stockoperator.StockOperator;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class StockServiceImpl implements StockService {
 
-
-//    private StockRepository stockRepository;
-//
-    @Value("${ref-data-url}")
+    @Value("${ieaxapi.ref-data-url}")
     private String url;
 
-    @Autowired
-    private StockLoader stockLoader;
+    private final StockLoader stockLoader;
+    private final StockOperator stockOperator;
+    private final StockRepositories repository;
 
     @Autowired
-    private StockOperator stockOperator;
+    private MessageSender messageSender;
 
-
-    @Autowired
-    private StockRepositories repository;
 
     @Override
     @Transactional
     public void process() {
+        List<StockDto> stockDTOs = stockLoader.getStocksFromUrl(url);
+        List<StockEntity> stockEntities = stockDTOs.stream().map(StockDto::toStockEntity).collect(Collectors.toList());
+        stockOperator.findActualHighStock(stockEntities, 5);
+        log.info("Stock  {}", stockDTOs.size());
+        messageSender.send("New stock  : Time  " + LocalDateTime.now());
+        saveStocks(stockEntities.stream().limit(5).collect(Collectors.toList()));
 
-       while (true) {
-           List<Stock> stock = stockLoader.getStocksFromUrl(url);
-           stockOperator.findActualHighStock(stock, 5);
-           try {
-               Thread.sleep(5000);
-               System.out.println("Stock  " + stock.size());
-               saveStocks(stock.stream().limit(5).collect(Collectors.toList()));
-
-           } catch (InterruptedException e) {
-               e.printStackTrace();
-           }
-       }
     }
 
-    private void saveStocks(List<Stock> stocks) {
-        for (Stock stock : stocks) {
+    private void saveStocks(List<StockEntity> stockEntities) {
+        stockEntities.forEach(stock -> {
             if (repository.existsById(stock.getSymbol())) {
-                Stock stockFromDB = repository.getById(stock.getSymbol());
-                if (Objects.nonNull(stockFromDB)
-                        && Objects.nonNull(stockFromDB.getPrice())
-                        && Objects.nonNull(stock)
-                        && Objects.nonNull(stock.getPrice())) {
-                    if (stockFromDB.getPrice().compareTo(stock.getPrice()) != 0) {
+                StockEntity stockEntityFromDB = repository.getById(stock.getSymbol());
+                if (Objects.nonNull(stockEntityFromDB.getPrice()) && Objects.nonNull(stock.getPrice())) {
+                    if (stockEntityFromDB.getPrice().compareTo(stock.getPrice()) != 0) {
                         repository.save(stock);
                     }
                 }
             } else {
                 repository.save(stock);
             }
-        }
+        });
     }
 }

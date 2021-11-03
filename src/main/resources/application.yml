@@ -1,0 +1,31 @@
+spring:
+  main:
+    web-application-type: none
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    generate-ddl: true
+    show-sql: true
+  datasource:
+    url: jdbc:postgresql://ec2-34-227-120-94.compute-1.amazonaws.com:5432/daf28hbr6q3old
+    username:
+    password:
+ieaxapi:
+  token:
+  host: https://sandbox.iexapis.com
+  latest-price-url: https://sandbox:iexapis:com/stable/stockEntity/%s/quote/latestPrice?token=
+  ref-data-url:
+
+cloud:
+  aws:
+    region:
+      static:
+      auto: false
+    stack:
+      auto: false
+    credentials:
+      access-key:
+      secret-key:
+    end-point:
+      uri:
